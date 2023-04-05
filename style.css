@@ -24,11 +24,6 @@
 }
 
 .tl {
-  background-color: black;
-  border-radius: 69%;
   height: 100%;
   width: 100%;
-  margin-left: 50%;
-  margin-right: 50%;
-  transform: translateX(-50%);
 }
