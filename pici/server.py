@@ -56,10 +56,6 @@ def get_password_hash(password):
 
 
 def get_user(username: str):
-    # if username in db:
-    #     user_dict = db[username]
-    #     return UserInDB(**user_dict)
-
 	cursor = users_db.cursor()
 	cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
 	user = cursor.fetchone()
@@ -68,12 +64,6 @@ def get_user(username: str):
 
 
 def authenticate_user(username: str, password: str):
-    # user = get_user(fake_db, username)
-    # if not user:
-    #     return False
-    # if not verify_password(password, user.hashed_password):
-    #     return False
-    # return user
 	cursor = users_db.cursor()
 	cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
 	user = cursor.fetchone()
@@ -201,58 +191,3 @@ if __name__ == "__main__":
 
     uvicorn.run(app,)
         
-    #as a test, add these articles to the db
-#     {
-# 	"events": [
-# 		{
-# 			"title": "Never",
-# 			"description": "hello wor- fuck you",
-# 			"date": "2022-01-01",
-# 			"thumbnail": "https://tr-werkzeuge.de/wp-content/uploads/2019/10/neue-website.jpeg",
-# 			"icon": "idk",
-# 			"icon-color": "#ffffff",
-# 			"importance": "3",
-# 			"wiki-link": "https://en.wikipedia.org/wiki/New_Year's_Day"
-# 		},
-# 		{
-# 			"title": "Gonna",
-# 			"description": "Your dad wont come back bruh",
-# 			"date": "2022-02-01",
-# 			"thumbnail": "https://s3.theasianparent.com/cdn-cgi/image/width=700,quality=95/tap-assets-prod/wp-content/uploads/sites/12/2018/01/dad-leaves-.jpg",
-# 			"icon": "idk",
-# 			"icon-color": "#ffffff",
-# 			"importance": "2",
-# 			"wiki-link": "https://en.wikipedia.org/wiki/New_Year's_Day"
-# 		},
-# 		{
-# 			"title": "Give",
-# 			"description": "your mom is fat",
-# 			"date": "2022-02-03",
-# 			"thumbnail": "https://free-funny-jokes.com/funny-pictures/yo-mama-so-fat-jokes.webp",
-# 			"icon": "idk",
-# 			"icon-color": "#ffffff",
-# 			"importance": "1",
-# 			"wiki-link": "https://en.wikipedia.org/wiki/New_Year's_Day"
-# 		},
-# 		{
-# 			"title": "You",
-# 			"description": "lorem ipsum whatever",
-# 			"date": "2022-08-05",
-# 			"thumbnail": "https://assets.justinmind.com/wp-content/webp-express/webp-images/uploads/2018/11/Lorem-Ipsum-alternatives-768x492.png.webp",
-# 			"icon": "idk",
-# 			"icon-color": "#ffffff",
-# 			"importance": "2",
-# 			"wiki-link": "https://en.wikipedia.org/wiki/New_Year's_Day"
-# 		},
-# 		{
-# 			"title": "Up",
-# 			"description": "The start of the new year.",
-# 			"date": "2023-01-01",
-# 			"thumbnail": "https://mamasgeeky.com/wp-content/uploads/2019/12/new-years-eve-meme-1.jpg",
-# 			"icon": "idk",
-# 			"icon-color": "#ffffff",
-# 			"importance": "3",
-# 			"wiki-link": "https://en.wikipedia.org/wiki/New_Year's_Day"
-# 		}
-# 	]
-# }
