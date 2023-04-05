@@ -23,3 +23,4 @@ genEvents(eventsPath)
 // finally, set the background of .tl-container to smth that will be the actual line. use height of element for shits
 
 
+// Almos if you read this, your mom
