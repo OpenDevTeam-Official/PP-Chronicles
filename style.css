@@ -14,6 +14,7 @@
 .title {
   /* height: 100%; */
   font-size: 60pt;
+  color: #ffffff;
   margin-top: 2vh;
   margin-bottom: 2vh;
 }
@@ -23,7 +24,8 @@
   height: 100%;
 }
 
-.tl {
-  height: 100%;
-  width: 100%;
+.yearStamp {
+  display:flex;
+  justify-content: center;
+  /* Font stuff etc but cant be asked rn */
 }
