@@ -362,4 +362,7 @@ if __name__ == "__main__":
 
     uvicorn.run("server:app", reload=True, ssl_certfile="./fc.pem", ssl_keyfile="./pr.pem", port=443, host="0.0.0.0")
     #uvicorn.run("server:app", reload=True)
+
+    #example SQLITE query to make user admin
+    #UPDATE users SET is_admin = 1 WHERE username = "usernamehere"
     
