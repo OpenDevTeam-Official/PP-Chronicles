@@ -335,6 +335,8 @@ if __name__ == "__main__":
     cursor.execute("CREATE TABLE IF NOT EXISTS submissions (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, date TEXT, thumbnail TEXT, icon TEXT, icon_color TEXT, importance INTEGER, wiki_link TEXT, submitter TEXT, submitStatus TEXT)")
     users_db.commit()
 
-
+    import os
+    path = "/home/ubuntu/PP-Chronicles/pici"
+    os.chdir(path)
     uvicorn.run(app, ssl_certfile="home/ubuntu/PP-Chronicles/pici/fullchain.pem", ssl_keyfile="home/ubuntu/PP-Chronicles/pici/privkey.pem", port=443, host="api.opendevteam.com")
         
