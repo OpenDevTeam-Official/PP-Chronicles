@@ -1,10 +1,10 @@
 // get json (via request later) from tseting.json
-const eventsPath = "tseting.json"
+const eventsPath = "https://api.opendevteam.com/articles"
 
 // get .tl-container element
 
 function genEvents(path) {
-	fetch(path)
+	fetch(path,)
 		.then(response => response.json())
 		.then(data => {
 			for (let eventIndex = 0; eventIndex < data.events.length; eventIndex++) {
