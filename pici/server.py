@@ -152,7 +152,7 @@ async def login_for_access_token(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/signup")
+@app.post("/signup", summary="Sign up for an account", description="Signs you up for an account. Returns an error if the username is already taken.")
 async def signup(username, password, email, full_name):
     cursor = users_db.cursor()
     #ignore capitalization when checking if username is taken
@@ -181,7 +181,7 @@ async def signup(username, password, email, full_name):
         except:
             return {"error": "Something went wrong, please contact Almos or Simon for help. Your custom client may be misbehaving."}
         
-@app.get("/users/me/", response_model=User)
+@app.get("/users/me/", response_model=User, summary="Get current user", description="Gets all information about the current user. This endpoint requires authentication")
 async def read_users_me(
     current_user: Annotated[User, Depends(get_current_active_user)]
 ):
@@ -198,7 +198,7 @@ class Article(BaseModel):
     importance : int
     wiki_link : str
         
-@app.get("/articles")
+@app.get("/articles", summary="Get all articles", description="Get all articles. If the user is an admin, all articles will be returned. If the user isn't an admin, no secret/scheduled articles will be returned. Authentication is optional.")
 async def get_articles(current_user = Depends(get_current_active_user_optional_auth)):
     # cursor = users_db.cursor()
     # cursor.execute("SELECT * FROM articles")
@@ -216,7 +216,7 @@ async def get_articles(current_user = Depends(get_current_active_user_optional_a
     else:
         return [article for article in articles if datetime.strptime(article[3], "%Y-%m-%d").date() <= datetime.today().date()]
 
-@app.post("/articles/add")
+@app.post("/articles/add", summary="Add Article", description="Adds an article. This endpoint requires authentication and the user must be an admin.")
 async def add_article(title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user: Annotated[User, Depends(get_current_active_user)]):
 	if not current_user.is_admin:
 		return {"error": "You are not an admin"}
@@ -225,7 +225,7 @@ async def add_article(title, description, date, thumbnail, icon, icon_color, imp
 	users_db.commit()
 	return {"success": "Article added"}
 
-@app.post("/articles/delete")
+@app.post("/articles/delete", summary="Delete Article", description="Deletes an article. This endpoint requires authentication and the user must be an admin.")
 async def delete_article(id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
@@ -247,7 +247,7 @@ class SubmittedArticle(BaseModel):
     submitter : str
     submitStatus : str
 
-@app.post("/articles/submit")
+@app.post("/articles/submit", summary="Submit Article", description="Submits an article. This endpoint requires authentication and the user must not have more than 5 pending articles. (admins are exempt from this limit)")
 async def submit_article(title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user: Annotated[User, Depends(get_current_active_user)]):
     # a user may have only 5 pending articles at a time
     if not current_user.is_admin:
@@ -256,13 +256,13 @@ async def submit_article(title, description, date, thumbnail, icon, icon_color, 
         articles = cursor.fetchall()
         if len(articles) >= 5:
             return {"error": "You have too many pending articles. You can only have 5 pending articles at a time. Please wait for your articles to be reviewed before submitting more."}
-
+    
     cursor = users_db.cursor()
     cursor.execute("INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user.username, "pending"))
     users_db.commit()
     return {"success": "Article submitted for review"}
 
-@app.get("/articles/submissions")
+@app.get("/articles/submissions", summary="Get all submissions", description="Gets ALL submissions from ALL users. This endpoint requires authentication and the user must be an admin.")
 async def get_submissions(current_user: Annotated[User, Depends(get_current_active_user)]):
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
@@ -271,7 +271,7 @@ async def get_submissions(current_user: Annotated[User, Depends(get_current_acti
     submissions = cursor.fetchall()
     return submissions
 
-@app.post("/articles/submissions/approve")
+@app.post("/articles/submissions/approve", summary="Approve submission", description="Approves a submission. This endpoint requires authentication and the user must be an admin.")
 async def approve_submission(id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
@@ -284,7 +284,7 @@ async def approve_submission(id: int, current_user: Annotated[User, Depends(get_
     users_db.commit()
     return {"success": "Submission approved"}
 
-@app.post("/articles/submissions/reject")
+@app.post("/articles/submissions/reject", summary="Reject submission", description="Rejects a submission. This endpoint requires authentication and the user must be an admin.")
 async def reject_submission(id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
@@ -294,7 +294,7 @@ async def reject_submission(id: int, current_user: Annotated[User, Depends(get_c
     users_db.commit()
     return {"success": "Submission rejected"}
 
-@app.post("/articles/submissions/markforimprovement")
+@app.post("/articles/submissions/markforimprovement", summary="Mark for improvement", description="Marks a submission for improvement. Once a submission is marked for improvement, the Sumbittor is allowed to edit it again. This endpoint requires authentication and the user must be an admin.")
 async def mark_for_improvement(id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
@@ -304,7 +304,7 @@ async def mark_for_improvement(id: int, current_user: Annotated[User, Depends(ge
     users_db.commit()
     return {"success": "Submission marked for improvement."}
 
-@app.get("/articles/submissions/mysubmissions")
+@app.get("/articles/submissions/mysubmissions", summary="Get my submissions", description="Gets all submissions from the current user. This endpoint requires authentication.")
 async def get_my_submissions(current_user: Annotated[User, Depends(get_current_active_user)]):
     cursor = users_db.cursor()
     cursor.execute("SELECT * FROM submissions WHERE submitter = ?", (current_user.username,))
@@ -312,7 +312,7 @@ async def get_my_submissions(current_user: Annotated[User, Depends(get_current_a
     return submissions
 
 
-@app.post("/articles/submissions/edit")
+@app.post("/articles/submissions/edit", summary="Edit submission", description="Edits a submission. This endpoint requires authentication and the user must be the submitter of the submission. The submission must also be marked for improvement.")
 async def edit_submission(id: int, title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user: Annotated[User, Depends(get_current_active_user)]):
     #a user can only edit their own submissions, and only if they have been marked for improvement
     if not current_user.is_admin:
@@ -324,11 +324,13 @@ async def edit_submission(id: int, title, description, date, thumbnail, icon, ic
         if submission[10] != "improvement needed":
             return {"error": "You can only edit submissions that have been marked for improvement"}
         cursor.execute("UPDATE submissions SET title = ?, description = ?, date = ?, thumbnail = ?, icon = ?, icon_color = ?, importance = ?, wiki_link = ? WHERE id = ?", (title, description, date, thumbnail, icon, icon_color, importance, wiki_link, id))
+        cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("pending", id))
         users_db.commit()
         return {"success": "Submission edited"}
     else:
         cursor = users_db.cursor()
         cursor.execute("UPDATE submissions SET title = ?, description = ?, date = ?, thumbnail = ?, icon = ?, icon_color = ?, importance = ?, wiki_link = ? WHERE id = ?", (title, description, date, thumbnail, icon, icon_color, importance, wiki_link, id))
+        cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("pending", id))
         users_db.commit()
         return {"success": "Submission edited"}
 
