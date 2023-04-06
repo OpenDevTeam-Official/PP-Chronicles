@@ -336,5 +336,5 @@ if __name__ == "__main__":
     users_db.commit()
 
 
-    uvicorn.run(app, ssl_certfile="./fullchain.pem", ssl_keyfile="./privkey.pem", port=443, host="api.opendevteam.com")
+    uvicorn.run(app, ssl_certfile="./fc.pem", ssl_keyfile="./pr.pem", port=443, host="api.opendevteam.com")
         
