@@ -198,7 +198,7 @@ class Article(BaseModel):
     importance : int
     wiki_link : str
         
-@app.post("/articles")
+@app.get("/articles")
 async def get_articles(current_user = Depends(get_current_active_user_optional_auth)):
     # cursor = users_db.cursor()
     # cursor.execute("SELECT * FROM articles")
@@ -262,7 +262,7 @@ async def submit_article(title, description, date, thumbnail, icon, icon_color, 
     users_db.commit()
     return {"success": "Article submitted for review"}
 
-@app.post("/articles/submissions")
+@app.get("/articles/submissions")
 async def get_submissions(current_user: Annotated[User, Depends(get_current_active_user)]):
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
