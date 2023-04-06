@@ -304,6 +304,13 @@ async def mark_for_improvement(id: int, current_user: Annotated[User, Depends(ge
     users_db.commit()
     return {"success": "Submission marked for improvement."}
 
+@app.get("/articles/submissions/mysubmissions")
+async def get_my_submissions(current_user: Annotated[User, Depends(get_current_active_user)]):
+    cursor = users_db.cursor()
+    cursor.execute("SELECT * FROM submissions WHERE submitter = ?", (current_user.username,))
+    submissions = cursor.fetchall()
+    return submissions
+
 
 @app.post("/articles/submissions/edit")
 async def edit_submission(id: int, title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user: Annotated[User, Depends(get_current_active_user)]):
