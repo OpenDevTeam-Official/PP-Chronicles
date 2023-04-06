@@ -7,8 +7,8 @@ function genEvents(path) {
 	fetch(path,)
 		.then(response => response.json())
 		.then(data => {
-			for (let eventIndex = 0; eventIndex < data.events.length; eventIndex++) {
-				console.log(data["events"][eventIndex])
+			for (let eventIndex = 0; eventIndex < data.length; eventIndex++) {
+				console.log(data[eventIndex])
 				// if its the 1st event create a year Stamp
 				// gen event
 				// check if year changed if yes create a year Stamp
