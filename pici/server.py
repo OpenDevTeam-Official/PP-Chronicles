@@ -169,10 +169,12 @@ async def signup(username, password, email, full_name):
         return {"error": "Username already taken"}
     else:
         try: 
-            if len(password) < 8:
-                return {"error": "Password must be at least 8 characters long"}
+            if len(password) < 8 or not re.search(r"[A-Z]", password) or not re.search(r"[a-z]", password) or not re.search(r"[0-9]", password):
+                return {"error": "Password must be at least 8 characters long, and must contain at least one number, one uppercase letter, and one lowercase letter."}
             if len(username) > 20:
                 return {"error": "Username must be at most 20 characters long"}
+            if len(email) > 50:
+                return {"error": "Email must be at most 50 characters long. If your email is actually longer than that, please contact Almos or Simon for help."}
             if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
                 return {"error": "Invalid email"}
             cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (username, email, full_name, get_password_hash(password), False))
@@ -333,9 +335,8 @@ async def edit_submission(id: int, title, description, date, thumbnail, icon, ic
         cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("pending", id))
         users_db.commit()
         return {"success": "Submission edited"}
-
-
     
+
 if __name__ == "__main__":
     #setup db if not setup
     cursor = users_db.cursor()
@@ -345,5 +346,6 @@ if __name__ == "__main__":
     users_db.commit()
 
 
-    uvicorn.run(app, ssl_certfile="./fc.pem", ssl_keyfile="./pr.pem", port=443, host="0.0.0.0")
-        
+    uvicorn.run("server:app", reload=True, ssl_certfile="./fc.pem", ssl_keyfile="./pr.pem", port=443, host="0.0.0.0")
+    #uvicorn.run("server:app", reload=True)
+    
