@@ -20,6 +20,9 @@
 }
 
 .tl-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100vw;
   height: 100%;
 }
@@ -29,3 +32,48 @@
   justify-content: center;
   /* Font stuff etc but cant be asked rn */
 }
+
+
+
+
+
+.eventTitle {
+  max-height: 5%;
+}
+
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(107, 105, 105);
+  max-height: 25vh;
+  margin-bottom: 2vh;
+  min-width: 35vw;
+}
+
+.eventContainer {
+  max-width: 20vw;
+}
+
+.descImageContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.eventthumbnail {
+  width: 20%;
+}
+
+/* .img {
+
+} */
+
+/* move left n right */
+/* .left {
+  transform: translateX(-40%);
+}
+
+.right {
+  transform: translateX(40%);
+}
+ */

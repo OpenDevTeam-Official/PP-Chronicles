@@ -31,7 +31,7 @@ function placeEvent(tlContainer, event) {
 	iconImage.src = "icons/" + event[5] +".svg"
 	iconContainer.appendChild(iconImage)
 	eventContainer = document.createElement("div")
-	eventContainer.classList.add("eventConatiner")
+	eventContainer.classList.add("eventContainer")
 	titleText = document.createElement("h2")
 	titleText.classList.add("eventTitle")
 	titleText.textContent = event[1]
@@ -55,12 +55,14 @@ function placeEvent(tlContainer, event) {
 	eventContainer.appendChild(descriptionImageContainer)
 	eventContainer.appendChild(button)
 	if (event[0] % 2 == 0) {
-		eventContainer.classList.add("right");
+		mainContainer.classList.add("right");
+		mainContainer.appendChild(iconContainer)
+		mainContainer.appendChild(eventContainer)
 	} else {
-		eventContainer.classList.add("left"); 
+		mainContainer.classList.add("left");
+		mainContainer.appendChild(eventContainer)
+		mainContainer.appendChild(iconContainer)
 	}
-	mainContainer.appendChild(eventContainer)
-	mainContainer.appendChild(iconContainer)
 	tlContainer.appendChild(mainContainer);
 }
 
@@ -71,9 +73,9 @@ function placeYear(tlContainer, year) {
 	textH2.textContent = yearText;
 	yearStamp.appendChild(textH2);
 	yearStamp.classList.add("yearStamp");
-	tlContainer.appendChild(yearStamp); 		
-} 
-  
+	tlContainer.appendChild(yearStamp);
+}
+
 genEvents(eventsPath)
 
 
