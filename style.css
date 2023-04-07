@@ -37,10 +37,13 @@
 
 
 
+
+
+
+
 .eventTitle {
   max-height: 5%;
 }
-
 
 .mainContainer {
   display: flex;
@@ -61,12 +64,10 @@
 }
 
 .eventthumbnail {
-  width: 20%;
+  width: 40%;
+  object-fit: cover;
 }
 
-/* .img {
-
-} */
 
 /* move left n right */
 /* .left {
