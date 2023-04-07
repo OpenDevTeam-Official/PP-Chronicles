@@ -1,8 +1,13 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import TextField from '@mui/material/TextField';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
 
-  
+
 // function getRecentSubmissions() {
 //   let api = "https://api.opendevteam.com/articles";
 //   fetch(api)
@@ -36,10 +41,42 @@ function App() {
 
   const [mySubmissions, setMySubmissions] = useState([]);
 
+
+  var toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    ['blockquote', 'code-block'],
+
+    [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+    [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+    [{ 'direction': 'rtl' }],                         // text direction
+
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [ 'link', 'image', 'video', 'formula' ],          // add's image support
+    [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+    [{ 'font': ["Sans Serif"] }],
+    [{ 'align': [] }],
+
+    ['clean']                                         // remove formatting button
+  ];
+
+  const [submissionTitle, setSubmissionTitle] = useState('');
+  const [submissionDescription, setSubmissionDescription] = useState('');
+  const [submissionDate, setSubmissionDate] = useState('');
+  const [submissionThumbnail, setSubmissionThumbnail] = useState('');
+  const [submissionIcon, setSubmissionIcon] = useState('');
+  const [submissionIconColor, setSubmissionIconColor] = useState('');
+  const [submissionImportance, setSubmissionImportance] = useState('');
+  const [submissionWikiLink, setSubmissionWikiLink] = useState('');
+        
+
   useEffect(() => {
     restoreToken();
     pollRecentSubmissions();
     getQueueSize();
+    setSubmissionDescription('<h1>Hello there, Contributor!</h1></br><p>Feel free to begin writing your submission here.</p>');
     //check if there is a token in local storage
   }, []);
 
@@ -72,6 +109,12 @@ function App() {
     if (token) {
       setToken(token);
     }
+  }
+
+  function parseHTML(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
   }
   
 
@@ -185,6 +228,32 @@ function App() {
     setMySubmissions(data);
   }
 
+  const submitSubmission = async () => {
+    if (!submissionTitle || !submissionDescription || !submissionDate || !submissionThumbnail || !submissionIcon || !submissionIconColor || !submissionImportance || !submissionWikiLink) {
+      alert("All fields are required.")
+    }
+    else {
+      if (!user) {
+        alert("You must be logged in to submit an article.")
+      }
+      else {
+        const response = await fetch('https://api.opendevteam.com/articles/submit' + '?title=' + submissionTitle + '&description=' + submissionDescription + '&date=' + submissionDate + '&thumbnail=' + submissionThumbnail + '&icon=' + submissionIcon + '&icon_color=' + submissionIconColor + '&importance=' + submissionImportance + '&wiki_link=' + submissionWikiLink, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const data = await response.json();
+        if (data.success) {
+          alert("Submission successful! Please wait for an admin to approve your submission.")
+          getMySubmissions();
+        }
+        else if (data.error != null) {
+          alert(data.error);
+        }
+      }
+    }
+  }
 
   return (
     <div className="App">
@@ -223,9 +292,9 @@ function App() {
           </div>
         </div>
         <div className="recent-submissions-footer">
-          <a className="recent-submissions-encourage">These submissions, and more were made possible by people just like you!</a>
+          <a className="recent-submissions-encourage">These submissions, and more were made possible by people just like you.</a>
           <br></br>
-          <a className="recent-submissions-encourage">Help us preserve the history of PixelPlace.</a>
+          <a className="recent-submissions-encourage">Help us preserve the history of PixelPlace!</a>
         </div>
       </div>
 
@@ -236,8 +305,8 @@ function App() {
               <div className="seperator-line"></div>
               <div className="status-container">
                 <h1>Status</h1>
-                <p>Queue Size: {queueSize.queueLength}</p>
-                <p title="This is the estimated maximum time that you will have to wait for your submission to be approved. This is in no way a 100% guarantee, but it should be pretty close.">Guaranteed Maxiumum Wait Time: {queueSize.estimatedTime}</p>
+                <p>Submission Queue Size: {queueSize.queueLength}</p>
+                <p title="This is the estimated maximum time that you will have to wait for your submission to be approved. This is in no way a 100% guarantee, but it should be pretty close.">Estimated Maxiumum Wait Time: {queueSize.estimatedTime} day(s)</p>
                 {isUserAdmin ? (
                     <div className="admin">
                       <a className="admin-title">Signed in as Admin 🕵️‍♀️</a>
@@ -247,13 +316,13 @@ function App() {
                       <a className="not-admin-title">Signed in with Regular Permissions</a>
                     </div>
                   )}
-                <p>Queue Server Status: Online</p>
+                <p>Queue Server Status: ✅</p>
               </div>
               <div className="seperator-line"></div>
               {/* Submission format
               id : int
               title: str
-              description: str
+              description: str (HTML, should be sanitized and rendered)
               date : str
               thumbnail: str
               icon : str
@@ -265,7 +334,7 @@ function App() {
 
               <div className="my-submissions-container">
                 <h1>My Submissions</h1>
-                <p>Here are all of your submissions. If you have any questions, please contact us on Discord.<br></br> Your submission is pending? See Guaranteed Maxiumum Wait Time above.</p> 
+                <p>Here are all of your submissions. If you have any questions, please contact us on Discord.<br></br> Due to security reasons, your submittion will not be rendered here, however it will be on the website once it's approved.<br /> Your submission is pending? See Guaranteed Maxiumum Wait Time above.</p> 
                 <div className="my-submissions">
                   <table className='my-submissions-table'>
                     <tr>
@@ -276,7 +345,8 @@ function App() {
                       {mySubmissions.map((submission) => (
                         <tr>
                           <td>{submission[1]}</td>
-                          <td>{submission[2]}</td>
+                          {/* sanitize and render html */}
+                          <td>{parseHTML(submission[2])}</td>
                           <td className={"status-" + submission[10]}>{submission[10]}</td>
                         </tr>
                       ))}
@@ -284,7 +354,24 @@ function App() {
                 </div>
                     
               </div>
-              <iframe width="500" height="200" src="https://www.youtube.com/embed/Lva3_gvlcns?autoplay=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <div className="seperator-line"></div>
+              <div className="submit-container">
+                <h1>Submit</h1>
+                <p>Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format.</p>
+                <div className="submit-form">
+                  <ReactQuill theme="snow" value={submissionDescription} onChange={setSubmissionDescription} modules= {{ toolbar: toolbarOptions }} />
+                  <div className="submit-form-fields">
+                    <TextField id="outlined-basic" label="Title" variant="outlined" value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} />
+                    <TextField id="outlined-basic" label="Thumbnail URL" variant="outlined" value={submissionThumbnail} onChange={(e) => setSubmissionThumbnail(e.target.value)} />
+                    <TextField id="outlined-basic" label="Icon URL" variant="outlined" value={submissionIcon} onChange={(e) => setSubmissionIcon(e.target.value)} />
+                    <TextField id="outlined-basic" label="Icon Color" variant="outlined" value={submissionIconColor} onChange={(e) => setSubmissionIconColor(e.target.value)} />
+                    <TextField id="outlined-basic" label="Wiki Link" variant="outlined" value={submissionWikiLink} onChange={(e) => setSubmissionWikiLink(e.target.value)} />
+                    <TextField id="outlined-basic" label="Date (YYYY-MM-DD)" variant="outlined" value={submissionDate} onChange={(e) => setSubmissionDate(e.target.value)} />
+                  </div>
+                  <Box><Slider className='importance-slider' sx={{ width: "32vh", marginTop:"2vh", marginBottom:"4vh"}} size='medium' min={1} max={3} marks={[{value: 1, label:"major event"}, {value:2, label: 'normal event'}, {value:3, label: 'insignificant event'}]} value={submissionImportance} onChange={(e, newValue) => setSubmissionImportance(newValue)} aria-labelledby="continuous-slider" /></Box>
+                  <Button variant="contained" color="primary" onClick={submitSubmission}>Submit</Button>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="unauthenticated">
