@@ -77,6 +77,7 @@ function App() {
     pollRecentSubmissions();
     getQueueSize();
     setSubmissionDescription('<h1>Hello there, Contributor!</h1></br><p>Feel free to begin writing your submission here.</p>');
+    setSubmissionImportance(1);
     //check if there is a token in local storage
   }, []);
 
