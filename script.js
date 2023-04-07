@@ -25,35 +25,39 @@ function genEvents(path) {
 function placeEvent(tlContainer, event) {
 	mainContainer = document.createElement("div")
 	mainContainer.classList.add("mainContainer")
+	
 	iconContainer = document.createElement("div")
 	iconContainer.classList.add("iconImage")
 	iconImage = document.createElement("img")
 	iconImage.src = "icons/" + event[5] +".svg"
+	iconImage.classList.add("imgSVG")
 	iconContainer.appendChild(iconImage)
+	
 	eventContainer = document.createElement("div")
 	eventContainer.classList.add("eventContainer")
+	
 	titleText = document.createElement("h2")
 	titleText.classList.add("eventTitle")
 	titleText.textContent = event[1]
-	descriptionImageContainer = document.createElement("div")
+	
 	description = document.createElement("h3")
 	description.classList.add("eventdescription")
 	description.textContent = event[2]
+	
 	thumbnailImage = document.createElement("img")
 	thumbnailImage.classList.add("eventthumbnail")
 	thumbnailImage.src = event[4]
-	button = document.createElement("button")
-	button.classList.add("linkButton")
-	button.textContent = "Take Owmince hostage" // change this
-	button.onclick = function() {
-		window.open(event[8])
-	}
-	descriptionImageContainer.appendChild(thumbnailImage)
-	descriptionImageContainer.appendChild(description)
-	descriptionImageContainer.classList.add("descImageContainer")
+	
+	eventContainer.appendChild(thumbnailImage)
 	eventContainer.appendChild(titleText)
-	eventContainer.appendChild(descriptionImageContainer)
-	eventContainer.appendChild(button)
+	eventContainer.appendChild(description)
+	
+	eventContainer.setAttribute('title', "Read more")
+
+	eventContainer.addEventListener('click', function (thing) {
+		window.open(event[8])
+	});
+
 	if (event[0] % 2 == 0) {
 		mainContainer.classList.add("right");
 		mainContainer.appendChild(iconContainer)

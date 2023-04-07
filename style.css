@@ -1,7 +1,8 @@
 .html,body {
+  user-select: none;
 	margin: 0px;
   height: 100vh;
-  background-color: #454545;
+  background-color: #181818 ;
 }
 
 .container {
@@ -28,76 +29,106 @@
 }
 
 .yearStamp {
+  font-size: 30pt;
   display:flex;
   justify-content: center;
   /* Font stuff etc but cant be asked rn */
+  padding: 0;
 }
 
-
-
-
-
-
-
-
-
 .eventTitle {
-  max-height: 5%;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #FFFFFF;
+  mix-blend-mode: overlay;
+  text-align: center;
+  /* Dynamic Font size */
+  font-size: 5vh; 
+  /* Remove margin */
   margin: 0;
-  margin-bottom: 0.5vh;
-  font-size: 2vw;
 }
 
 .mainContainer {
+  /* Layout  */
   display: flex;
   flex-direction: row;
-  background-color: rgb(107, 105, 105);
-  max-height: 25vh;
-  margin-bottom: 2vh;
-  width: 35vw;
-  padding: 0.5vh 0.5vw;
-  align-items: center;
-  gap: 30%;
+  align-items: center; 
+  /* gap between event and icon */
 }
 
 .eventContainer {
-  max-width: 20vw;
+  transition: 0.3s;
+  border-radius: 20px;
+  width: 30vw;
+  height: fit-content;
+  padding: 2px 2px;
+  z-index: -2;
+  outline: 2px solid white;
 }
 
-
-.descImageContainer {
-  display: flex;
-  flex-direction: row;
+.eventContainer:hover {
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.726));
+  cursor: pointer;
 }
+
 
 .iconImage {
-  padding: 2%;
-  object-fit: fill;
+  position: inherit;
+  /* size */
+  width: 50px;
+  /* outline */
   outline: 2px solid white;
-  background-color: red;
   border-radius: 69%;
-  width: 10%;
+  padding: 10px;
+  /* event color her later */
+  background-color: lime;
+
+  /* 
+  object-fit: fill;
+  background-color: red;
+  width: 10%; */
 }
 
+.imgSVG {
+  filter: brightness(0) invert(1);
+}
 
 .eventdescription {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  color: #FFFFFF;
+  mix-blend-mode: overlay;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 20pt;
+  margin-top: 0;
   padding-left: 0.5vw;
 }
 
 .eventthumbnail {
-  max-width: 10vw;
-  max-height: 10vw;
-  /* max-height: 40%; */
+  height: 100%;
+  z-index: -2;
+  position: absolute;
   object-fit: cover;
+  width: 30vw;
+  filter: blur(10px) brightness(60%);
+  /* 
+  max-height: 10vw;
+  padding-bottom: 0.5vh;
+  aspect-ratio: 16 / 9; 
+  */
+}
+
+.linkButton {
+  border-radius: 10px; 
 }
 
 
 /* move left n right */
-.left {
-  transform: translateX(-42%);
-}
+  .left {
+    transform: translateX(-17.5vw);
+  }
 
-.right {
-  transform: translateX(42%);
-}
+   .right {
+    transform: translateX(17.5vw);
+  } 
 
