@@ -350,6 +350,13 @@ async def edit_submission(id: int, title, description, date, thumbnail, icon, ic
         cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("pending", id))
         users_db.commit()
         return {"success": "Submission edited"}
+
+@app.get("/articles/submissions/queuelength", summary="Get queue length", description="Gets the length of the submission queue, and the estimated time it will take to approve all submissions.")
+async def get_queue_length():
+    cursor = users_db.cursor()
+    cursor.execute("SELECT * FROM submissions")
+    submissions = cursor.fetchall()
+    return {"queueLength": len(submissions), "estimatedTime": round(len(submissions) * 1.2)}
     
 
 if __name__ == "__main__":

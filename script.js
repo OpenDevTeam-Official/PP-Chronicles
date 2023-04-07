@@ -59,10 +59,12 @@ function placeEvent(tlContainer, event) {
 	});
 
 	if (event[0] % 2 == 0) {
+		iconContainer.classList.add("right")
 		mainContainer.classList.add("right");
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
 	} else {
+		iconContainer.classList.add("left")
 		mainContainer.classList.add("left");
 		mainContainer.appendChild(eventContainer)
 		mainContainer.appendChild(iconContainer)
@@ -76,7 +78,7 @@ function placeYear(tlContainer, year) {
 	const yearStamp = document.createElement("div");
 	textH2.textContent = yearText;
 	yearStamp.appendChild(textH2);
-	yearStamp.classList.add("yearStamp");
+	textH2.classList.add("yearStamp");
 	tlContainer.appendChild(yearStamp);
 }
 
