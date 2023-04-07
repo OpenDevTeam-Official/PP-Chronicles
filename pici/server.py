@@ -273,7 +273,27 @@ async def submit_article(title, description, date, thumbnail, icon, icon_color, 
         articles = cursor.fetchall()
         if len(articles) >= 5:
             return {"error": "You have too many pending articles. You can only have 5 pending articles at a time. Please wait for your articles to be reviewed before submitting more."}
-    
+    if not re.match(r"^[a-zA-Z0-9 ]+$", title):
+        return {"error": "Title must contain only alphanumeric characters and spaces"}
+    #validate date
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        return {"error": "Invalid date format. Must be YYYY-MM-DD"}
+    #validate importance
+    if importance < 1 or importance > 3:
+        if not current_user.is_admin:
+            return {"error": "Importance must be 1, 2 or 3"}
+    #validate icon color (hex)
+    if not re.match(r"^#(?:[0-9a-fA-F]{3}){1,2}$", icon_color):
+        return {"error": "Icon color must be a valid hex color"}
+    #validate thumbnail (url)
+    if not re.match(r"^(http|https)://", thumbnail):
+        return {"error": "Thumbnail must be a valid URL"}
+    #validate wiki link (url)
+    if not re.match(r"^(http|https)://", wiki_link):
+        return {"error": "Wiki link must be a valid URL"}
+
     cursor = users_db.cursor()
     cursor.execute("INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user.username, "pending"))
     users_db.commit()
