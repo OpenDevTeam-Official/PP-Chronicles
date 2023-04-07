@@ -4,7 +4,7 @@ The PixelPlace Chronicles will finally provide a trustable, vetted, high quality
 # Technologies Used
 ### Programming Languages
 #### Frontend
-[![Languages](https://skillicons.dev/icons?i=html,css,js)](https://skillicons.dev)
+[![Languages](https://skillicons.dev/icons?i=html,css,js,react)](https://skillicons.dev)
 #### Backend
 [![Languages](https://skillicons.dev/icons?i=python,fastapi,sqlite)](https://skillicons.dev)
 
