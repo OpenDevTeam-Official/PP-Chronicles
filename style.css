@@ -43,6 +43,9 @@
 
 .eventTitle {
   max-height: 5%;
+  margin: 0;
+  margin-bottom: 0.5vh;
+  font-size: 2vw;
 }
 
 .mainContainer {
@@ -51,30 +54,50 @@
   background-color: rgb(107, 105, 105);
   max-height: 25vh;
   margin-bottom: 2vh;
-  min-width: 35vw;
+  width: 35vw;
+  padding: 0.5vh 0.5vw;
+  align-items: center;
+  gap: 30%;
 }
 
 .eventContainer {
   max-width: 20vw;
 }
 
+
 .descImageContainer {
   display: flex;
   flex-direction: row;
 }
 
+.iconImage {
+  padding: 2%;
+  object-fit: fill;
+  outline: 2px solid white;
+  background-color: red;
+  border-radius: 69%;
+  width: 10%;
+}
+
+
+.eventdescription {
+  padding-left: 0.5vw;
+}
+
 .eventthumbnail {
-  width: 40%;
+  max-width: 10vw;
+  max-height: 10vw;
+  /* max-height: 40%; */
   object-fit: cover;
 }
 
 
 /* move left n right */
-/* .left {
-  transform: translateX(-40%);
+.left {
+  transform: translateX(-42%);
 }
 
 .right {
-  transform: translateX(40%);
+  transform: translateX(42%);
 }
- */
+
