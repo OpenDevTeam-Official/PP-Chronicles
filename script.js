@@ -17,13 +17,13 @@ function genEvents(path) {
 					placeYear(tlContainer,year)
 				}
 				// gen event
-				placeEvent(tlContainer,event)
+				placeEvent(tlContainer,event,eventIndex)
 			}
 		}
 	)
 }
 
-function placeEvent(tlContainer, event) {
+function placeEvent(tlContainer, event, index) {
 	mainContainer = document.createElement("div")
 	mainContainer.classList.add("mainContainer")
 
@@ -59,11 +59,13 @@ function placeEvent(tlContainer, event) {
 		window.open(event[8])
 	});
 
+
+	console.log(index)
 	if (isMobile) {
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
 	} else {
-		if (event[0] % 2 == 0) {
+		if ((index + 1) % 2 == 0) {
 			mainContainer.classList.add("right");
 			eventContainer.classList.add("right");
 			mainContainer.appendChild(iconContainer)
