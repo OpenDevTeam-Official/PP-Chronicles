@@ -265,7 +265,7 @@ class SubmittedArticle(BaseModel):
     submitStatus : str
 
 @app.post("/articles/submit", summary="Submit Article", description="Submits an article. This endpoint requires authentication and the user must not have more than 5 pending articles. (admins are exempt from this limit)")
-async def submit_article(title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user: Annotated[User, Depends(get_current_active_user)]):
+async def submit_article(current_user: Annotated[User, Depends(get_current_active_user)], form_data: Article):
     # a user may have only 5 pending articles at a time
     if not current_user.is_admin:
         cursor = users_db.cursor()
@@ -273,29 +273,29 @@ async def submit_article(title, description, date, thumbnail, icon, icon_color, 
         articles = cursor.fetchall()
         if len(articles) >= 5:
             return {"error": "You have too many pending articles. You can only have 5 pending articles at a time. Please wait for your articles to be reviewed before submitting more."}
-    if not re.match(r"^[a-zA-Z0-9 ]+$", title):
+    if not re.match(r"^[a-zA-Z0-9 ]+$", form_data.title):
         return {"error": "Title must contain only alphanumeric characters and spaces"}
     #validate date
     try:
-        datetime.strptime(date, "%Y-%m-%d")
+        datetime.strptime(form_data.date, "%Y-%m-%d")
     except ValueError:
         return {"error": "Invalid date format. Must be YYYY-MM-DD"}
     #validate importance
-    if int(importance) < 1 or int(importance) > 3:
+    if int(form_data.importance) < 1 or int(form_data.importance) > 3:
         if not current_user.is_admin:
             return {"error": "Importance must be 1, 2 or 3"}
     #validate icon color (hex)
     # if not re.match(r"^#(?:[0-9a-fA-F]{3}){1,2}$", icon_color):
     #     return {"error": "Icon color must be a valid hex color"}
     #validate thumbnail (url)
-    if not re.match(r"^(http|https)://", thumbnail):
+    if not re.match(r"^(http|https)://", form_data.thumbnail):
         return {"error": "Thumbnail must be a valid URL"}
     #validate wiki link (url)
-    if not re.match(r"^(http|https)://", wiki_link):
+    if not re.match(r"^(http|https)://", form_data.wiki_link):
         return {"error": "Wiki link must be a valid URL"}
 
     cursor = users_db.cursor()
-    cursor.execute("INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user.username, "pending"))
+    cursor.execute("INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (form_data.title, form_data.description, form_data.date, form_data.thumbnail, form_data.icon, form_data.icon_color, form_data.importance, form_data.wiki_link, current_user.username, "pending"))
     users_db.commit()
     return {"success": "Article submitted for review"}
 

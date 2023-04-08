@@ -357,9 +357,10 @@ function App() {
               <div className="seperator-line"></div>
               <div className="submit-container">
                 <h1>Submit</h1>
-                <p>Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format.</p>
+                <p >Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format.</p>
                 <div className="submit-form">
-                  <TextField id="outlined-basic" label="Title" variant="outlined" sx={{ width: "60vh", marginTop:"2vh"}} value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} />
+                  <a title="A title should be clear and concise, and it shouldn't contain emojis or anything spammy.">How do I title my article?</a>
+                  <TextField id="outlined-basic"  label="Title" variant="outlined" sx={{ width: "60vh", marginTop:"2vh"}} value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} />
                   <div className="submit-form-fields">
                   <TextField id="outlined-basic" label="Description" variant="outlined" value={submissionDescription} onChange={(e) => setSubmissionDescription(e.target.value)} />
                     <TextField id="outlined-basic" label="Thumbnail URL" variant="outlined" value={submissionThumbnail} onChange={(e) => setSubmissionThumbnail(e.target.value)} />
