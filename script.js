@@ -25,33 +25,33 @@ function genEvents(path) {
 function placeEvent(tlContainer, event) {
 	mainContainer = document.createElement("div")
 	mainContainer.classList.add("mainContainer")
-	
+
 	iconContainer = document.createElement("div")
 	iconContainer.classList.add("iconImage")
 	iconImage = document.createElement("img")
 	iconImage.src = "icons/" + event[5] +".svg"
 	iconImage.classList.add("imgSVG")
 	iconContainer.appendChild(iconImage)
-	
+
 	eventContainer = document.createElement("div")
 	eventContainer.classList.add("eventContainer")
-	
+
 	titleText = document.createElement("h2")
 	titleText.classList.add("eventTitle")
 	titleText.textContent = event[1]
-	
+
 	description = document.createElement("h3")
 	description.classList.add("eventdescription")
 	description.textContent = event[2]
-	
+
 	thumbnailImage = document.createElement("img")
 	thumbnailImage.classList.add("eventthumbnail")
 	thumbnailImage.src = event[4]
-	
+
 	eventContainer.appendChild(thumbnailImage)
 	eventContainer.appendChild(titleText)
 	eventContainer.appendChild(description)
-	
+
 	eventContainer.setAttribute('title', "Read more")
 
 	eventContainer.addEventListener('click', function (thing) {
@@ -59,13 +59,13 @@ function placeEvent(tlContainer, event) {
 	});
 
 	if (event[0] % 2 == 0) {
-		iconContainer.classList.add("right")
 		mainContainer.classList.add("right");
+		eventContainer.classList.add("right");
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
 	} else {
-		iconContainer.classList.add("left")
 		mainContainer.classList.add("left");
+		eventContainer.classList.add("left");
 		mainContainer.appendChild(eventContainer)
 		mainContainer.appendChild(iconContainer)
 	}
