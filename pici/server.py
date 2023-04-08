@@ -326,7 +326,7 @@ async def approve_submission(id: int, current_user: Annotated[User, Depends(get_
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
     #make sure it is actually pending
-    cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
+    cursor.execute("SELECT * FROM submissions WHERE id = ?", (id,))
     submission = cursor.fetchone()
     if submission[10] != "pending":
         return {"error": "Submission is not pending"}
@@ -344,7 +344,7 @@ async def reject_submission(id: int, current_user: Annotated[User, Depends(get_c
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
     cursor = users_db.cursor()
-    cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
+    cursor.execute("SELECT * FROM submissions WHERE id = ?", (id,))
     submission = cursor.fetchone()
     if submission[10] != "pending":
         return {"error": "Submission is not pending"}
@@ -359,7 +359,7 @@ async def mark_for_improvement(id: int, current_user: Annotated[User, Depends(ge
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
     cursor = users_db.cursor()
-    cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
+    cursor.execute("SELECT * FROM submissions WHERE id = ?", (id,))
     submission = cursor.fetchone()
     if submission[10] != "pending":
         return {"error": "Submission is not pending"}
