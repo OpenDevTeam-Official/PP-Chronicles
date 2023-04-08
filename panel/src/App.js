@@ -237,11 +237,22 @@ function App() {
         alert("You must be logged in to submit an article.")
       }
       else {
-        const response = await fetch('https://api.opendevteam.com/articles/submit' + '?title=' + submissionTitle + '&description=' + submissionDescription + '&date=' + submissionDate + '&thumbnail=' + submissionThumbnail + '&icon=' + submissionIcon + '&icon_color=' + submissionIconColor + '&importance=' + submissionImportance + '&wiki_link=' + submissionWikiLink, {
+        const response = await fetch('https://api.opendevteam.com/articles/submit', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
-          }
+          },
+          //json form data
+          body: JSON.stringify({
+            title: submissionTitle,
+            description: submissionDescription,
+            date: submissionDate,
+            thumbnail: submissionThumbnail,
+            icon: submissionIcon,
+            icon_color: submissionIconColor,
+            importance: submissionImportance,
+            wiki_link: submissionWikiLink
+          })
         });
         const data = await response.json();
         if (data.success) {

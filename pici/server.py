@@ -264,8 +264,18 @@ class SubmittedArticle(BaseModel):
     submitter : str
     submitStatus : str
 
+class ArticleRequest(BaseModel):
+    title: str
+    description: str
+    date : str
+    thumbnail: str
+    icon : str
+    icon_color : str
+    importance : int
+    wiki_link : str
+
 @app.post("/articles/submit", summary="Submit Article", description="Submits an article. This endpoint requires authentication and the user must not have more than 5 pending articles. (admins are exempt from this limit)")
-async def submit_article(current_user: Annotated[User, Depends(get_current_active_user)], form_data: Article):
+async def submit_article(current_user: Annotated[User, Depends(get_current_active_user)], form_data: ArticleRequest):
     # a user may have only 5 pending articles at a time
     if not current_user.is_admin:
         cursor = users_db.cursor()
