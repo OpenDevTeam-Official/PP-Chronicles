@@ -281,7 +281,7 @@ async def submit_article(title, description, date, thumbnail, icon, icon_color, 
     except ValueError:
         return {"error": "Invalid date format. Must be YYYY-MM-DD"}
     #validate importance
-    if importance < 1 or importance > 3:
+    if int(importance) < 1 or int(importance) > 3:
         if not current_user.is_admin:
             return {"error": "Importance must be 1, 2 or 3"}
     #validate icon color (hex)
