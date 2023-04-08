@@ -285,8 +285,8 @@ async def submit_article(title, description, date, thumbnail, icon, icon_color, 
         if not current_user.is_admin:
             return {"error": "Importance must be 1, 2 or 3"}
     #validate icon color (hex)
-    if not re.match(r"^#(?:[0-9a-fA-F]{3}){1,2}$", icon_color):
-        return {"error": "Icon color must be a valid hex color"}
+    # if not re.match(r"^#(?:[0-9a-fA-F]{3}){1,2}$", icon_color):
+    #     return {"error": "Icon color must be a valid hex color"}
     #validate thumbnail (url)
     if not re.match(r"^(http|https)://", thumbnail):
         return {"error": "Thumbnail must be a valid URL"}
