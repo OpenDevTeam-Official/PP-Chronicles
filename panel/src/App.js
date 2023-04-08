@@ -76,7 +76,6 @@ function App() {
     restoreToken();
     pollRecentSubmissions();
     getQueueSize();
-    setSubmissionDescription('<h1>Hello there, Contributor!</h1></br><p>Feel free to begin writing your submission here.</p>');
     setSubmissionImportance(1);
     //check if there is a token in local storage
   }, []);
@@ -360,9 +359,9 @@ function App() {
                 <h1>Submit</h1>
                 <p>Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format.</p>
                 <div className="submit-form">
-                  <ReactQuill theme="snow" value={submissionDescription} onChange={setSubmissionDescription} modules= {{ toolbar: toolbarOptions }} />
+                  <TextField id="outlined-basic" label="Title" variant="outlined" sx={{ width: "60vh", marginTop:"2vh"}} value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} />
                   <div className="submit-form-fields">
-                    <TextField id="outlined-basic" label="Title" variant="outlined" value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} />
+                  <TextField id="outlined-basic" label="Description" variant="outlined" value={submissionDescription} onChange={(e) => setSubmissionDescription(e.target.value)} />
                     <TextField id="outlined-basic" label="Thumbnail URL" variant="outlined" value={submissionThumbnail} onChange={(e) => setSubmissionThumbnail(e.target.value)} />
                     <TextField id="outlined-basic" label="Icon URL" variant="outlined" value={submissionIcon} onChange={(e) => setSubmissionIcon(e.target.value)} />
                     <TextField id="outlined-basic" label="Icon Color" variant="outlined" value={submissionIconColor} onChange={(e) => setSubmissionIconColor(e.target.value)} />
