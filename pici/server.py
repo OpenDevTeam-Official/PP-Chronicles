@@ -328,7 +328,7 @@ async def approve_submission(id: int, current_user: Annotated[User, Depends(get_
     #make sure it is actually pending
     cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
     submission = cursor.fetchone()
-    if submission[11] != "pending":
+    if submission[10] != "pending":
         return {"error": "Submission is not pending"}
     
     cursor.execute("SELECT * FROM submissions WHERE id = ?", (id,))
@@ -346,7 +346,7 @@ async def reject_submission(id: int, current_user: Annotated[User, Depends(get_c
     cursor = users_db.cursor()
     cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
     submission = cursor.fetchone()
-    if submission[11] != "pending":
+    if submission[10] != "pending":
         return {"error": "Submission is not pending"}
 
     #mark submission as rejected
@@ -361,7 +361,7 @@ async def mark_for_improvement(id: int, current_user: Annotated[User, Depends(ge
     cursor = users_db.cursor()
     cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
     submission = cursor.fetchone()
-    if submission[11] != "pending":
+    if submission[10] != "pending":
         return {"error": "Submission is not pending"}
     #mark submission as rejected
     cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("improvement needed", id))
