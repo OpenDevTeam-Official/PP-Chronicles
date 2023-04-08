@@ -318,6 +318,8 @@ async def get_submissions(current_user: Annotated[User, Depends(get_current_acti
     cursor = users_db.cursor()
     cursor.execute("SELECT * FROM submissions")
     submissions = cursor.fetchall()
+    #sort by date
+    submissions.sort(key=lambda x: datetime.strptime(x[3], "%Y-%m-%d").date(), reverse=True)
     return submissions
 
 @app.post("/articles/submissions/approve", summary="Approve submission", description="Approves a submission. This endpoint requires authentication and the user must be an admin.")
