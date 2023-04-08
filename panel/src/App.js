@@ -17,7 +17,6 @@ import Box from '@mui/material/Box';
 //     });
 //}
 
-
 function App() {
   const [recentSubmissions, setRecentSubmissions] = useState([]);
 
@@ -70,6 +69,8 @@ function App() {
   const [submissionIconColor, setSubmissionIconColor] = useState('');
   const [submissionImportance, setSubmissionImportance] = useState('');
   const [submissionWikiLink, setSubmissionWikiLink] = useState('');
+
+  const [adminSubmissions, setAdminSubmissions] = useState([]);
         
 
   useEffect(() => {
@@ -201,9 +202,44 @@ function App() {
     const data = await response.json();
     if (!data.error) {
       setIsUserAdmin(true);
+      setAdminSubmissions(data);
     }
     else {
       setIsUserAdmin(false);
+    }
+  }
+
+  const approveSubmission = async (submissionId) => {
+    const response = await fetch('https://api.opendevteam.com/articles/submissions/approve?id=' + submissionId, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    if (data.success) {
+      alert("Submission approved successfully!");
+      checkIfUserIsAdmin();
+    }
+    else if (data.error != null) {
+      alert(data.error);
+    }
+  }
+
+  const rejectSubmission = async (submissionId) => {
+    const response = await fetch('https://api.opendevteam.com/articles/submissions/reject?id=' + submissionId, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await response.json();
+    if (data.success) {
+      alert("Submission rejected successfully!");
+      checkIfUserIsAdmin();
+    }
+    else if (data.error != null) {
+      alert(data.error);
     }
   }
 
@@ -383,6 +419,47 @@ function App() {
                   </div>
                   <Box><Slider className='importance-slider' sx={{ width: "32vh", marginTop:"2vh", marginBottom:"4vh"}} size='medium' min={1} max={3} marks={[{value: 1, label:"major event"}, {value:2, label: 'normal event'}, {value:3, label: 'insignificant event'}]} value={submissionImportance} onChange={(e, newValue) => setSubmissionImportance(newValue)} aria-labelledby="continuous-slider" /></Box>
                   <Button variant="contained" color="primary" onClick={submitSubmission}>Submit</Button>
+                </div>
+              </div>
+              <div className="seperator-line"></div>
+              <div className="admin-container">
+                <h1>Admin</h1>
+                <p>Here are all of the submissions that are currently pending. You can approve or deny them here.</p>
+                <div className="admin-submissions">
+                  <table className='admin-submissions-table'>
+                    <tr>
+                      <th>ID</th>
+                      <th>Submitter</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Thumbnail</th>
+                      <th>Icon</th>
+                      <th>Icon Color</th>
+                      <th>Importance</th>
+                      <th>Wiki Link</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                      <th>Approve</th>
+                      <th>Deny</th>
+                    </tr>
+                      {adminSubmissions.map((submission) => (  
+                        <tr>
+                          <td>{submission[0]}</td>
+                          <td>{submission[8]}</td>
+                          <td>{submission[1]}</td>
+                          <td>{parseHTML(submission[2])}</td>
+                          <td>{submission[4]}</td>
+                          <td>{submission[5]}</td>
+                          <td>{submission[6]}</td>
+                          <td>{submission[7]}</td>
+                          <td>{submission[9]}</td>
+                          <td>{submission[3]}</td>
+                          <td className={"status-" + submission[10]}>{submission[10]}</td>
+                          <td><Button variant="contained" color="success" onClick={() => approveSubmission(submission[0])}>Approve</Button></td>
+                          <td><Button variant="contained" color="error" onClick={() => rejectSubmission(submission[0])}>Deny</Button></td>
+                        </tr>
+                      ))}
+                  </table>
                 </div>
               </div>
             </div>

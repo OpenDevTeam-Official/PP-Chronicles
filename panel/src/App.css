@@ -304,13 +304,28 @@
 }
 
 table {
-  border-collapse: collapse;
   width: 50%;
+
+  /* set behaviour of table */
+
+
+  border-collapse: collapse;
+
+  display:inline-block;
+  vertical-align:top;
+
+  overflow-x: scroll;
 }
 
 th, td {
   text-align: left;
   padding: 8px;
+}
+
+td {
+  border-bottom: 1px solid #ddd;
+
+  /* dont make the table too wide */
 }
 
 tr:nth-child(even){background-color: #f2f2f2}
@@ -376,6 +391,27 @@ th {
 
 }
 
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.admin-submissions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
 
 /* .App-logo {
   height: 40vmin;

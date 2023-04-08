@@ -221,6 +221,8 @@ async def get_articles(current_user = Depends(get_current_active_user_optional_a
     # cursor.execute("SELECT * FROM articles")
     # articles = cursor.fetchall()
     # return articles
+
+    tomorrow = datetime.today() + timedelta(days=1)
     
     cursor = users_db.cursor()
     cursor.execute("SELECT * FROM articles")
@@ -229,9 +231,9 @@ async def get_articles(current_user = Depends(get_current_active_user_optional_a
         if current_user.is_admin:
             return articles
         else:
-            return [article for article in articles if datetime.strptime(article[3], "%Y-%m-%d").date() <= datetime.today().date()]
+            return [article for article in articles if datetime.strptime(article[3], "%Y-%m-%d").date() <= tomorrow.date()]
     else:
-        return [article for article in articles if datetime.strptime(article[3], "%Y-%m-%d").date() <= datetime.today().date()]
+        return [article for article in articles if datetime.strptime(article[3], "%Y-%m-%d").date() <= tomorrow.date()]
 
 @app.post("/articles/add", summary="Add Article", description="Adds an article. This endpoint requires authentication and the user must be an admin.")
 async def add_article(title, description, date, thumbnail, icon, icon_color, importance, wiki_link, current_user: Annotated[User, Depends(get_current_active_user)]):
@@ -320,9 +322,15 @@ async def get_submissions(current_user: Annotated[User, Depends(get_current_acti
 
 @app.post("/articles/submissions/approve", summary="Approve submission", description="Approves a submission. This endpoint requires authentication and the user must be an admin.")
 async def approve_submission(id: int, current_user: Annotated[User, Depends(get_current_active_user)]):
+    cursor = users_db.cursor()
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
-    cursor = users_db.cursor()
+    #make sure it is actually pending
+    cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
+    submission = cursor.fetchone()
+    if submission[11] != "pending":
+        return {"error": "Submission is not pending"}
+    
     cursor.execute("SELECT * FROM submissions WHERE id = ?", (id,))
     submission = cursor.fetchone()
     cursor.execute("INSERT INTO articles VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)", (submission[1], submission[2], submission[3], submission[4], submission[5], submission[6], submission[7], submission[8]))
@@ -336,6 +344,11 @@ async def reject_submission(id: int, current_user: Annotated[User, Depends(get_c
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
     cursor = users_db.cursor()
+    cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
+    submission = cursor.fetchone()
+    if submission[11] != "pending":
+        return {"error": "Submission is not pending"}
+
     #mark submission as rejected
     cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("rejected", id))
     users_db.commit()
@@ -346,6 +359,10 @@ async def mark_for_improvement(id: int, current_user: Annotated[User, Depends(ge
     if not current_user.is_admin:
         return {"error": "You are not an admin"}
     cursor = users_db.cursor()
+    cursor.execute("SELECT * FROM submissions WHERE id = ? AND submitStatus = ?", (id, "pending"))
+    submission = cursor.fetchone()
+    if submission[11] != "pending":
+        return {"error": "Submission is not pending"}
     #mark submission as rejected
     cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("improvement needed", id))
     users_db.commit()
