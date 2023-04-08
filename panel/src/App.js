@@ -240,7 +240,8 @@ function App() {
         const response = await fetch('https://api.opendevteam.com/articles/submit', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
           },
           //json form data
           body: JSON.stringify({
