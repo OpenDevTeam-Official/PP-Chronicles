@@ -1,5 +1,6 @@
 const eventsPath = "https://api.opendevteam.com/articles"
 const tlContainer = document.getElementsByClassName("tl-container")[0]
+const isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
 
 function genEvents(path) {
 	fetch(path,)
@@ -58,16 +59,21 @@ function placeEvent(tlContainer, event) {
 		window.open(event[8])
 	});
 
-	if (event[0] % 2 == 0) {
-		mainContainer.classList.add("right");
-		eventContainer.classList.add("right");
+	if (isMobile) {
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
 	} else {
-		mainContainer.classList.add("left");
-		eventContainer.classList.add("left");
-		mainContainer.appendChild(eventContainer)
-		mainContainer.appendChild(iconContainer)
+		if (event[0] % 2 == 0) {
+			mainContainer.classList.add("right");
+			eventContainer.classList.add("right");
+			mainContainer.appendChild(iconContainer)
+			mainContainer.appendChild(eventContainer)
+		} else {
+			mainContainer.classList.add("left");
+			eventContainer.classList.add("left");
+			mainContainer.appendChild(eventContainer)
+			mainContainer.appendChild(iconContainer)
+		}
 	}
 	tlContainer.appendChild(mainContainer);
 }
@@ -83,6 +89,9 @@ function placeYear(tlContainer, year) {
 }
 
 genEvents(eventsPath)
+
+
+
 
 
 // finally, set the background of .tl-container to smth that will be the actual line. use height of element for shits
