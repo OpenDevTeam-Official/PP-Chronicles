@@ -468,7 +468,7 @@ function App() {
               <div className="seperator-line"></div>
               <div className="admin-container">
                 <h1>Admin</h1>
-                <p>Here are all of the submissions that are currently pending. You can approve or deny them here.</p>
+                <p>Here are all of the submissions that are currently pending. You can approve or deny them here.<br/>You cannot remove an article on this website after it has been approved.<br/>For that (for now), go on api.opendevteam.com/docs, auth yourself using the 🔒, find the article ID and then remove it.</p>
                 <div className="admin-submissions">
                   <table className='admin-submissions-table'>
                     <tr>
