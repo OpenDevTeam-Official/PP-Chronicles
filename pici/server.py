@@ -174,7 +174,7 @@ class Signup(BaseModel):
     full_name: str
 
 @app.post("/signup", summary="Sign up for an account", description="Signs you up for an account. Returns an error if the username is already taken.")
-async def signup(form_data: Annotated[Signup, Depends()]):
+async def signup(form_data: Signup):
     cursor = users_db.cursor()
     #ignore capitalization when checking if username is taken
     #get all users
