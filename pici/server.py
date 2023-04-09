@@ -167,8 +167,14 @@ async def login_for_access_token(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
+class Signup(BaseModel):
+    username: str
+    password: str
+    email: str
+    full_name: str
+
 @app.post("/signup", summary="Sign up for an account", description="Signs you up for an account. Returns an error if the username is already taken.")
-async def signup(username, password, email, full_name):
+async def signup(form_data: Annotated[Signup, Depends()]):
     cursor = users_db.cursor()
     #ignore capitalization when checking if username is taken
     #get all users
@@ -177,22 +183,22 @@ async def signup(username, password, email, full_name):
     #check if username is taken
     user = None
     for u in users:
-        if u[0].lower() == username.lower():
+        if u[0].lower() == form_data.username.lower():
             user = u
             break
     if user:
         return {"error": "Username already taken"}
     else:
         try: 
-            if len(password) < 8 or not re.search(r"[A-Z]", password) or not re.search(r"[a-z]", password) or not re.search(r"[0-9]", password):
+            if len(form_data.password) < 8 or not re.search(r"[A-Z]", form_data.password) or not re.search(r"[a-z]", form_data.password) or not re.search(r"[0-9]", form_data.password):
                 return {"error": "Password must be at least 8 characters long, and must contain at least one number, one uppercase letter, and one lowercase letter."}
-            if len(username) > 20:
+            if len(form_data.username) > 20:
                 return {"error": "Username must be at most 20 characters long"}
-            if len(email) > 50:
+            if len(form_data.email) > 50:
                 return {"error": "Email must be at most 50 characters long. If your email is actually longer than that, please contact Almos or Simon for help."}
-            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", form_data.email):
                 return {"error": "Invalid email"}
-            cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (username, email, full_name, get_password_hash(password), False))
+            cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?)", (form_data.username, form_data.email, form_data.full_name, get_password_hash(form_data.password), False))
             users_db.commit()
             return {"success": "User created"}
         except:
