@@ -317,9 +317,9 @@ function App() {
     <div className="App">
       <div className="header">
         <h1 className="header-title">PixelPlace Chronicles</h1>
-        <h2 className="header-username">Welcome, {user ? user.full_name : ''}</h2>
         <div className="header-buttons">
           {/* use a 5 px margin between the buttons */}
+          <Button variant="" className="header-button" sx = {{margin: '5px'}} onClick={() => {window.open("https://wiki.opendevteam.com", "_blank")}}>open PP Chronicles Wiki</Button>
           <Button variant="" className="header-button" sx = {{margin: '5px'}} onClick={() => {window.open("https://pptl.opendevteam.com", "_self")}}>back to PP Chronicles</Button>
         </div>
       </div>
@@ -422,15 +422,9 @@ function App() {
               <div className="seperator-line"></div>
               <div className="submit-container">
                 <h1>Submit</h1>
-                <p >Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format.</p>
-                <p>Steps:</p>
-                <ol className='submit-steps-ol'>
-                  <li>Write an article about the event on the PP Chronicles Wiki.</li>
-                  <li>Fill out the form below.</li>
-                  <li>Click the "Submit" button.</li>
-                  <li>Wait for your submission to be approved.</li>
-                  <li>Enjoy your submission on the website!</li>
-                </ol>
+                <h2><a href="https://wiki.opendevteam.com/wiki/Main_Page#How_to_contribute" target='_blank'>Before submitting you MUST read this guide.</a></h2>
+
+                <p >Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format and use the guide above.</p>
                 <div className="submit-form">
                   <TextField id="outlined-basic"  label="Title" variant="outlined" sx={{ width: "60vh", marginTop:"2vh"}} value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} helperText="A title should be clear and concise, and it shouldn't contain emojis or anything spammy." />
                   <div className="submit-form-fields">
@@ -460,7 +454,8 @@ function App() {
                   <TextField id="outlined-basic" label="Wiki Link" variant="outlined" value={submissionWikiLink} onChange={(e) => setSubmissionWikiLink(e.target.value)} helperText="A link to a PP Chronicles Wiki article detailing the event."/>
                   <TextField id="outlined-basic" label="Date (YYYY-MM-DD)" variant="outlined" value={submissionDate} onChange={(e) => setSubmissionDate(e.target.value)} helperText="Date (or closest approximation) when the event occured."/>
                   </div>
-                  <Box><Slider className='importance-slider' sx={{ width: "32vh", marginTop:"2vh", marginBottom:"4vh"}} size='medium' min={1} max={3} marks={[{value: 1, label:"major event"}, {value:2, label: 'normal event'}, {value:3, label: 'insignificant event'}]} value={submissionImportance} onChange={(e, newValue) => setSubmissionImportance(newValue)} aria-labelledby="continuous-slider" /></Box>
+                  <Box><Slider className='importance-slider' sx={{ width: "32vh", marginTop:"2vh", marginBottom:"4vh"}} size='medium' min={1} max={3} marks={[{value: 1, label:"major event"}, {value:2, label: 'normal event'}, {value:3, label: 'insignificant event'}]} value={submissionImportance} onChange={(e, newValue) => setSubmissionImportance(newValue)}  aria-labelledby="continuous-slider" /></Box>
+                  <p>By clicking this button, I confirm that I have read the guide and that my submission is in the correct format.</p>
                   <Button variant="contained" color="primary" onClick={submitSubmission}>Submit</Button>
                 </div>
               </div>

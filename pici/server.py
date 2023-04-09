@@ -317,6 +317,9 @@ async def submit_article(current_user: Annotated[User, Depends(get_current_activ
     #wiki link must be less than 100 characters
     if len(form_data.wiki_link) > 100:
         return {"error": "Wiki link must be less than 100 characters, why is it so long?"}
+    #wiki link must be on the website (https://wiki.opendevteam.com)
+    if not re.match(r"^https://wiki.opendevteam.com", form_data.wiki_link):
+        return {"error": "Wiki link must be on the wiki.opendevteam.com website"}
     #title must be less than 50 characters
     if len(form_data.title) > 50:
         return {"error": "Title must be less than 50 characters"}

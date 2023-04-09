@@ -25,10 +25,11 @@
   margin-left: 2vw;
 }
 
+
 .header-username {
   font-size: 16pt;
   color: #000000;
-  margin-right: 2vw;
+  margin-right: 0vw;
 }
 
 .header-buttons {
