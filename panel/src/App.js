@@ -181,11 +181,17 @@ function App() {
       alert("Passwords do not match.")
     }
     else {
-      const response = await fetch('https://api.opendevteam.com/signup?username=' + signupUsername + '&password=' + signupPassword + '&email=' + signupEmail + '&full_name=' + signupDisplayName, {
+      const response = await fetch('https://api.opendevteam.com/signup',{
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          username: signupUsername,
+          password: signupPassword,
+          email: signupEmail,
+          full_name: signupDisplayName
+        })
       });
       const data = await response.json();
       if (data.success) {
