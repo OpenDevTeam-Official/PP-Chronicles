@@ -290,7 +290,7 @@ async def submit_article(current_user: Annotated[User, Depends(get_current_activ
     #validate date
     try:
         datetime.strptime(form_data.date, "%Y-%m-%d")
-    except ValueError:
+    except:
         return {"error": "Invalid date format. Must be YYYY-MM-DD"}
     #validate importance
     if int(form_data.importance) < 1 or int(form_data.importance) > 3:

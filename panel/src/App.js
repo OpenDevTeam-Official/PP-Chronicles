@@ -6,6 +6,11 @@ import 'react-quill/dist/quill.snow.css';
 import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+
 
 
 // function getRecentSubmissions() {
@@ -101,7 +106,7 @@ function App() {
 
   async function pollRecentSubmissions() {
     getRecentSubmissions();
-    setTimeout(pollRecentSubmissions, 1000000);
+    setTimeout(pollRecentSubmissions, 10000);
   }
 
   async function restoreToken() {
@@ -383,23 +388,30 @@ function App() {
               <div className="my-submissions-container">
                 <h1>My Submissions</h1>
                 <p>Here are all of your submissions. If you have any questions, please contact us on Discord.<br></br> Due to security reasons, your submittion will not be rendered here, however it will be on the website once it's approved.<br /> Your submission is pending? See Guaranteed Maxiumum Wait Time above.</p> 
-                <div className="my-submissions">
-                  <table className='my-submissions-table'>
-                    <tr>
-                      <th>Title</th>
-                      <th>Description</th>
-                      <th>Status</th>
-                    </tr>
-                      {mySubmissions.map((submission) => (
-                        <tr>
-                          <td>{submission[1]}</td>
-                          {/* sanitize and render html */}
-                          <td>{parseHTML(submission[2])}</td>
-                          <td className={"status-" + submission[10]}>{submission[10]}</td>
-                        </tr>
-                      ))}
-                  </table>
-                </div>
+                {mySubmissions.length == 0 ? (
+                  <div className="no-submissions">
+                    <h2 className="no-submissions-title">You have no submissions.</h2>
+                    </div>
+                    ) : (
+                      <div className="my-submissions">
+                        <table className='my-submissions-table'>
+                          <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                          </tr>
+                            {mySubmissions.map((submission) => (
+                              <tr>
+                                <td>{submission[1]}</td>
+                                {/* sanitize and render html */}
+                                <td>{parseHTML(submission[2])}</td>
+                                <td className={"status-" + submission[10]}>{submission[10]}</td>
+                              </tr>
+                            ))}
+                        </table>
+                      </div>
+                    )}
+
                     
               </div>
               <div className="seperator-line"></div>
@@ -412,8 +424,25 @@ function App() {
                   <div className="submit-form-fields">
                   <TextField id="outlined-basic" label="Description" variant="outlined" value={submissionDescription} onChange={(e) => setSubmissionDescription(e.target.value)} />
                     <TextField id="outlined-basic" label="Thumbnail URL" variant="outlined" value={submissionThumbnail} onChange={(e) => setSubmissionThumbnail(e.target.value)} />
-                    <TextField id="outlined-basic" label="Icon URL" variant="outlined" value={submissionIcon} onChange={(e) => setSubmissionIcon(e.target.value)} />
-                    <TextField id="outlined-basic" label="Icon Color" variant="outlined" value={submissionIconColor} onChange={(e) => setSubmissionIconColor(e.target.value)} />
+                    <FormControl>
+                      <InputLabel id="demo-simple-select-label">Icon Type</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={submissionIcon}
+                        label="Icon Type"
+                        onChange={(e) => setSubmissionIcon(e.target.value)}
+                      >
+                        <MenuItem value={"news"}>News</MenuItem>
+                        <MenuItem value={"drama"}>Drama</MenuItem>
+                        <MenuItem value={"emergency"}>Emergency</MenuItem>
+                        <MenuItem value={"modteamenlargement"}>Mod Team Enlargement</MenuItem>
+                        <MenuItem value={"userjoined"}>User Joined</MenuItem>
+                        <MenuItem value={"userleft"}>User Left</MenuItem>
+                        <MenuItem value={"userleft"}>User Banned</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <TextField id="outlined-basic" label="Icon Color (HEX)" variant="outlined" value={submissionIconColor} onChange={(e) => setSubmissionIconColor(e.target.value)} />
                     <TextField id="outlined-basic" label="Wiki Link" variant="outlined" value={submissionWikiLink} onChange={(e) => setSubmissionWikiLink(e.target.value)} />
                     <TextField id="outlined-basic" label="Date (YYYY-MM-DD)" variant="outlined" value={submissionDate} onChange={(e) => setSubmissionDate(e.target.value)} />
                   </div>
