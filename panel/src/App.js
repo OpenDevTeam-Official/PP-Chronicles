@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-
+import FormHelperText from '@mui/material/FormHelperText';
 
 
 // function getRecentSubmissions() {
@@ -418,33 +418,42 @@ function App() {
               <div className="submit-container">
                 <h1>Submit</h1>
                 <p >Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format.</p>
+                <p>Steps:</p>
+                <ol className='submit-steps-ol'>
+                  <li>Write an article about the event on the PP Chronicles Wiki.</li>
+                  <li>Fill out the form below.</li>
+                  <li>Click the "Submit" button.</li>
+                  <li>Wait for your submission to be approved.</li>
+                  <li>Enjoy your submission on the website!</li>
+                </ol>
                 <div className="submit-form">
-                  <a title="A title should be clear and concise, and it shouldn't contain emojis or anything spammy.">How do I title my article?</a>
-                  <TextField id="outlined-basic"  label="Title" variant="outlined" sx={{ width: "60vh", marginTop:"2vh"}} value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} />
+                  <TextField id="outlined-basic"  label="Title" variant="outlined" sx={{ width: "60vh", marginTop:"2vh"}} value={submissionTitle} onChange={(e) => setSubmissionTitle(e.target.value)} helperText="A title should be clear and concise, and it shouldn't contain emojis or anything spammy." />
                   <div className="submit-form-fields">
-                  <TextField id="outlined-basic" label="Description" variant="outlined" value={submissionDescription} onChange={(e) => setSubmissionDescription(e.target.value)} />
-                    <TextField id="outlined-basic" label="Thumbnail URL" variant="outlined" value={submissionThumbnail} onChange={(e) => setSubmissionThumbnail(e.target.value)} />
-                    <FormControl>
-                      <InputLabel id="demo-simple-select-label">Icon Type</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={submissionIcon}
-                        label="Icon Type"
-                        onChange={(e) => setSubmissionIcon(e.target.value)}
-                      >
-                        <MenuItem value={"news"}>News</MenuItem>
-                        <MenuItem value={"drama"}>Drama</MenuItem>
-                        <MenuItem value={"emergency"}>Emergency</MenuItem>
-                        <MenuItem value={"modteamenlargement"}>Mod Team Enlargement</MenuItem>
-                        <MenuItem value={"userjoined"}>User Joined</MenuItem>
-                        <MenuItem value={"userleft"}>User Left</MenuItem>
-                        <MenuItem value={"userleft"}>User Banned</MenuItem>
-                      </Select>
-                    </FormControl>
-                    <TextField id="outlined-basic" label="Icon Color (HEX)" variant="outlined" value={submissionIconColor} onChange={(e) => setSubmissionIconColor(e.target.value)} />
-                    <TextField id="outlined-basic" label="Wiki Link" variant="outlined" value={submissionWikiLink} onChange={(e) => setSubmissionWikiLink(e.target.value)} />
-                    <TextField id="outlined-basic" label="Date (YYYY-MM-DD)" variant="outlined" value={submissionDate} onChange={(e) => setSubmissionDate(e.target.value)} />
+                  {/* char limit of 100 */}
+                  <TextField id="outlined-basic" label="Description" variant="outlined" value={submissionDescription} onChange={(e) => setSubmissionDescription(e.target.value)} inputProps={{ maxLength: 140 }} helperText="A short summary of the event, with a maximum of 140 charachters."/>
+                  <TextField id="outlined-basic" label="Thumbnail URL" variant="outlined" value={submissionThumbnail} onChange={(e) => setSubmissionThumbnail(e.target.value)} helperText="A URL to the image that will be shown on the website. If the image is inaccessible at the time of review, your submission will be rejected."/>
+                  <FormControl>
+                    <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={submissionIcon}
+                      label="Category"
+                      onChange={(e) => setSubmissionIcon(e.target.value)}
+                    >
+                      <MenuItem value={"news"}>News</MenuItem>
+                      <MenuItem value={"drama"}>Drama</MenuItem>
+                      <MenuItem value={"emergency"}>Emergency</MenuItem>
+                      <MenuItem value={"modteamenlargement"}>Mod Team Enlargement</MenuItem>
+                      <MenuItem value={"userjoined"}>User Joined</MenuItem>
+                      <MenuItem value={"userleft"}>User Left</MenuItem>
+                      <MenuItem value={"userleft"}>User Banned</MenuItem>
+                    </Select>
+                  <FormHelperText>Choose a category that best fits your submission.</FormHelperText>
+                  </FormControl>
+                  <TextField id="outlined-basic" label="Icon Color (HEX)" variant="outlined" value={submissionIconColor} onChange={(e) => setSubmissionIconColor(e.target.value)} helperText="This color will be used in some parts of the website."/>
+                  <TextField id="outlined-basic" label="Wiki Link" variant="outlined" value={submissionWikiLink} onChange={(e) => setSubmissionWikiLink(e.target.value)} helperText="A link to a PP Chronicles Wiki article detailing the event."/>
+                  <TextField id="outlined-basic" label="Date (YYYY-MM-DD)" variant="outlined" value={submissionDate} onChange={(e) => setSubmissionDate(e.target.value)} helperText="Date (or closest approximation) when the event occured."/>
                   </div>
                   <Box><Slider className='importance-slider' sx={{ width: "32vh", marginTop:"2vh", marginBottom:"4vh"}} size='medium' min={1} max={3} marks={[{value: 1, label:"major event"}, {value:2, label: 'normal event'}, {value:3, label: 'insignificant event'}]} value={submissionImportance} onChange={(e, newValue) => setSubmissionImportance(newValue)} aria-labelledby="continuous-slider" /></Box>
                   <Button variant="contained" color="primary" onClick={submitSubmission}>Submit</Button>

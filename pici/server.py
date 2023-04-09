@@ -297,14 +297,26 @@ async def submit_article(current_user: Annotated[User, Depends(get_current_activ
         if not current_user.is_admin:
             return {"error": "Importance must be 1, 2 or 3"}
     #validate icon color (hex)
-    # if not re.match(r"^#(?:[0-9a-fA-F]{3}){1,2}$", icon_color):
-    #     return {"error": "Icon color must be a valid hex color"}
-    #validate thumbnail (url)
-    if not re.match(r"^(http|https)://", form_data.thumbnail):
-        return {"error": "Thumbnail must be a valid URL"}
+    if not re.match(r"^#(?:[0-9a-fA-F]{3}){1,2}$", form_data.icon_color):
+        return {"error": "Icon color must be a valid hex color"}
+    #validate thumbnail (MUST end with .png, .jpg, .jpeg, and MUST be a url)
+    if not re.match(r".*\.(png|jpg|jpeg)$", form_data.thumbnail) and not re.match(r"^(http|https)://", form_data.thumbnail):
+        return {"error": "Thumbnail and must be a .png, .jpg or .jpeg and must be a valid URL."}
     #validate wiki link (url)
     if not re.match(r"^(http|https)://", form_data.wiki_link):
         return {"error": "Wiki link must be a valid URL"}
+    #description must be less than 150 characters
+    if len(form_data.description) > 150:
+        return {"error": "Description must be less than 150 characters"}
+    #wiki link must be less than 100 characters
+    if len(form_data.wiki_link) > 100:
+        return {"error": "Wiki link must be less than 100 characters, why is it so long?"}
+    #title must be less than 50 characters
+    if len(form_data.title) > 50:
+        return {"error": "Title must be less than 50 characters"}
+    #icon must be less than 50 characters
+    if len(form_data.icon) > 30:
+        return {"error": "Icon must be less than 30 characters"}
 
     cursor = users_db.cursor()
     cursor.execute("INSERT INTO submissions VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (form_data.title, form_data.description, form_data.date, form_data.thumbnail, form_data.icon, form_data.icon_color, form_data.importance, form_data.wiki_link, current_user.username, "pending"))
