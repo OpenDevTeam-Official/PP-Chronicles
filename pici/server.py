@@ -424,7 +424,7 @@ async def edit_submission(id: int, title, description, date, thumbnail, icon, ic
 @app.get("/articles/submissions/queuelength", summary="Get queue length", description="Gets the length of the submission queue, and the estimated time it will take to approve all submissions.")
 async def get_queue_length():
     cursor = users_db.cursor()
-    cursor.execute("SELECT * FROM submissions")
+    cursor.execute("SELECT * FROM submissions WHERE submitStatus = ?", ("pending",))
     submissions = cursor.fetchall()
     return {"queueLength": len(submissions), "estimatedTime": round(len(submissions) * 1.2)}
     
