@@ -1,7 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import TextField from '@mui/material/TextField';
 import Slider from '@mui/material/Slider';
