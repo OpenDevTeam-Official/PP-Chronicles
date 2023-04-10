@@ -315,6 +315,12 @@ table {
   vertical-align:top;
 
   overflow-x: scroll;
+
+  /* turn it into a box */
+  border: 1px solid #ddd;
+  word-break: break-word;
+
+
 }
 
 th, td {
@@ -408,10 +414,12 @@ ol, ol li { margin-left:0; padding-left:0; list-style-position:inside; }
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: 190vw;
   height: 100%;
   margin-top: 2vh;
   margin-bottom: 2vh;
+
+  /* prevent overflow */
 }
 
 /* .App-logo {
