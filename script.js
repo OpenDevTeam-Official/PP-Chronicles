@@ -6,11 +6,16 @@ function genEvents(path) {
 	fetch(path,)
 		.then(response => response.json())
 		.then(data => {
+			if (data.length == 0) {
+				placeOHOH("Api returned no results.")
+				return;
+			}
 			let year = data[0][3].split("-")[0]
 			for (let eventIndex = 0; eventIndex < data.length; eventIndex++) {
 				event = data[eventIndex]
 				// Place first year mark
-				if (event[0] == 1) {placeYear(tlContainer,event[3])}
+				console.log(event)
+				if (event == data[0]) {placeYear(tlContainer,event[3])}
 				// check if year changed if yes create a year Stamp
 				if (event[3].split("-")[0] != year) {
 					year = event[3].split("-")[0]
@@ -21,6 +26,16 @@ function genEvents(path) {
 			}
 		}
 	)
+}
+
+function placeOHOH(message) {
+	downContainer = document.createElement("div")
+	downContainer.classList.add("downContainer")
+	downH2 = document.createElement("h2")
+	downH2.classList.add("downText")
+	downH2.textContent = message
+	downContainer.appendChild(downH2)
+	tlContainer.appendChild(downContainer)
 }
 
 function placeEvent(tlContainer, event, index) {
@@ -60,7 +75,6 @@ function placeEvent(tlContainer, event, index) {
 	});
 
 
-	console.log(index)
 	if (isMobile) {
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
