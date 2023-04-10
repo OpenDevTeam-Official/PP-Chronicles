@@ -291,8 +291,6 @@ async def submit_article(current_user: Annotated[User, Depends(get_current_activ
         articles = cursor.fetchall()
         if len(articles) >= 5:
             return {"error": "You have too many pending articles. You can only have 5 pending articles at a time. Please wait for your articles to be reviewed before submitting more."}
-    if not re.match(r"^[a-zA-Z0-9 ]+$", form_data.title):
-        return {"error": "Title must contain only alphanumeric characters and spaces"}
     #validate date
     try:
         datetime.strptime(form_data.date, "%Y-%m-%d")
