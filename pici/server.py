@@ -308,6 +308,9 @@ async def submit_article(current_user: Annotated[User, Depends(get_current_activ
     #validate thumbnail (MUST end with .png, .jpg, .jpeg, and MUST be a url)
     if not re.match(r".*\.(png|jpg|jpeg)$", form_data.thumbnail) and not re.match(r"^(http|https)://", form_data.thumbnail):
         return {"error": "Thumbnail and must be a .png, .jpg or .jpeg and must be a valid URL."}
+    #thumbnail url must be the wiki (https://wiki.opendevteam.com)
+    if not re.match(r"^https://wiki.opendevteam.com", form_data.thumbnail):
+        return {"error": "Thumbnail must be on the wiki.opendevteam.com website. Click on 'Upload file' to upload a file to the wiki."}
     #validate wiki link (url)
     if not re.match(r"^(http|https)://", form_data.wiki_link):
         return {"error": "Wiki link must be a valid URL"}
