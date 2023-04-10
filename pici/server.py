@@ -419,7 +419,7 @@ async def edit_submission(id: int, title, description, date, thumbnail, icon, ic
         cursor.execute("UPDATE submissions SET title = ?, description = ?, date = ?, thumbnail = ?, icon = ?, icon_color = ?, importance = ?, wiki_link = ? WHERE id = ?", (title, description, date, thumbnail, icon, icon_color, importance, wiki_link, id))
         cursor.execute("UPDATE submissions SET submitStatus = ? WHERE id = ?", ("pending", id))
         users_db.commit()
-        return {"success": "Submission edited"}
+        return {"success": "Submission edited"}    
 
 @app.get("/articles/submissions/queuelength", summary="Get queue length", description="Gets the length of the submission queue, and the estimated time it will take to approve all submissions.")
 async def get_queue_length():
@@ -427,6 +427,28 @@ async def get_queue_length():
     cursor.execute("SELECT * FROM submissions WHERE submitStatus = ?", ("pending",))
     submissions = cursor.fetchall()
     return {"queueLength": len(submissions), "estimatedTime": round(len(submissions) * 1.2)}
+
+@app.get("/users/makeadmin", summary="Make user admin", description="Makes a user an admin. This endpoint requires authentication and the user must be an admin.")
+async def make_user_admin(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if not current_user.is_admin:
+        return {"error": "You are not an admin"}
+    cursor = users_db.cursor()
+    cursor.execute("UPDATE users SET is_admin = ? WHERE username = ?", (1, username))
+    if cursor.rowcount == 0:
+        return {"error": "User does not exist"}
+    users_db.commit()
+    return {"success": "User is now an admin"}
+
+@app.get("/users/removeadmin", summary="Remove admin", description="Removes admin from a user. This endpoint requires authentication and the user must be an admin.")
+async def remove_admin(username: str, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if not current_user.is_admin:
+        return {"error": "You are not an admin"}
+    cursor = users_db.cursor()
+    cursor.execute("UPDATE users SET is_admin = ? WHERE username = ?", (0, username))
+    if cursor.rowcount == 0:
+        return {"error": "User does not exist"}
+    users_db.commit()
+    return {"success": "Admin removed from user"}
     
 
 if __name__ == "__main__":
