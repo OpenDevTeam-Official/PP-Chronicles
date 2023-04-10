@@ -1,38 +1,42 @@
+// set some shit
 const eventsPath = "https://api.opendevteam.com/articles"
 const tlContainer = document.getElementsByClassName("tl-container")[0]
 const isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
 
+// This just makes my life so much easier lol. also hi bababoy
 if (location.hostname == "localhost") {
 	let title = document.title
 	document.title = "(DEV) " + title
 }
 
+// Used to generate all the events
 function genEvents(path) {
 	fetch(path,)
 		.then(response => response.json())
-		.then(data => {
+		.then(data =>{
+			// Test if data = nothing
 			if (data.length == 0) {
 				placeOHOH("Api returned no results.")
 				return;
 			}
 			let year = data[0][3].split("-")[0]
 			for (let eventIndex = 0; eventIndex < data.length; eventIndex++) {
-				event = data[eventIndex]
+				tlevent = data[eventIndex]
 				// Place first year mark
-				console.log(event)
-				if (event == data[0]) {placeYear(tlContainer,event[3])}
+				if (tlevent == data[0]) {placeYear(tlContainer,tlevent[3])}
 				// check if year changed if yes create a year Stamp
-				if (event[3].split("-")[0] != year) {
-					year = event[3].split("-")[0]
+				if (tlevent[3].split("-")[0] != year) {
+					year = tlevent[3].split("-")[0]
 					placeYear(tlContainer,year)
 				}
 				// gen event
-				placeEvent(tlContainer,event,eventIndex)
+				placeEvent(tlContainer,tlevent,eventIndex)
 			}
 		}
 	)
 }
 
+// Error message thing with funny name ig
 function placeOHOH(message) {
 	downContainer = document.createElement("div")
 	downContainer.classList.add("downContainer")
@@ -43,21 +47,21 @@ function placeOHOH(message) {
 	tlContainer.appendChild(downContainer)
 }
 
-function placeEvent(tlContainer, event, index) {
+function placeEvent(tlContainer, tlevent, index) {
 	mainContainer = document.createElement("div")
 	mainContainer.classList.add("mainContainer")
 
 	dateContainer = document.createElement("div")
 	dateContainer.classList.add("dateContainer")
 	dateStamp = document.createElement("h2")
-	dateStamp.textContent = event[1]
+	dateStamp.textContent = tlevent[3]
 	dateStamp.classList.add = "dateStamp"
 	dateContainer.appendChild(dateStamp)
 
 	iconContainer = document.createElement("div")
 	iconContainer.classList.add("iconImage")
 	iconImage = document.createElement("img")
-	iconImage.src = "icons/" + event[5] +".svg"
+	iconImage.src = "icons/" + tlevent[5] +".svg"
 	iconImage.classList.add("imgSVG")
 	iconContainer.appendChild(iconImage)
 
@@ -66,31 +70,30 @@ function placeEvent(tlContainer, event, index) {
 
 	titleText = document.createElement("h2")
 	titleText.classList.add("eventTitle")
-	titleText.textContent = event[1]
+	titleText.textContent = tlevent[1]
 
 	description = document.createElement("h3")
 	description.classList.add("eventdescription")
-	description.textContent = event[2]
+	description.textContent = tlevent[2]
 
 	thumbnailImage = document.createElement("img")
 	thumbnailImage.classList.add("eventthumbnail")
-	thumbnailImage.src = event[4]
+	thumbnailImage.src = tlevent[4]
 
 	eventContainer.appendChild(thumbnailImage)
 	eventContainer.appendChild(titleText)
 	eventContainer.appendChild(description)
 
 	eventContainer.setAttribute('title', "Read more")
-
 	eventContainer.addEventListener('click', function (thing) {
-		window.open(event[8])
+		window.open(tlevent[8])
 	});
 
 
 	if (isMobile) {
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
-		eventContainer.appendChild(dateContainer)
+		mainContainer.appendChild(dateContainer)
 	} else {
 		if ((index + 1) % 2 == 0) {
 			mainContainer.classList.add("right");
@@ -122,13 +125,6 @@ function placeYear(tlContainer, year) {
 }
 
 genEvents(eventsPath)
-
-
-
-
-
-// finally, set the background of .tl-container to smth that will be the actual line. use height of element for shits
-
 
 // ""Docs""
 // 0: 1        ID
