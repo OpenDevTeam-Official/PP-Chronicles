@@ -422,7 +422,7 @@ function App() {
               <div className="seperator-line"></div>
               <div className="submit-container">
                 <h1>Submit</h1>
-                <h2><a href="https://wiki.opendevteam.com/wiki/Main_Page#How_to_contribute" target='_blank'>Before submitting you MUST read this guide.</a></h2>
+                <h2>Before submitting you MUST read <a href="https://wiki.opendevteam.com/wiki/Main_Page#How_to_contribute" target='_blank'>this</a> guide.</h2>
 
                 <p >Submit your own PixelPlace Chronicles submission! Please make sure that your submission is in the correct format and use the guide above.</p>
                 <div className="submit-form">
@@ -483,14 +483,14 @@ function App() {
                       {adminSubmissions.map((submission) => (  
                         <tr>
                           <td>{submission[0]}</td>
-                          <td>{submission[8]}</td>
+                          <td>{submission[9]}</td>
                           <td>{submission[1]}</td>
                           <td>{parseHTML(submission[2])}</td>
                           <td>{submission[4]}</td>
                           <td>{submission[5]}</td>
                           <td>{submission[6]}</td>
                           <td>{submission[7]}</td>
-                          <td>{submission[9]}</td>
+                          <td>{submission[8]}</td>
                           <td>{submission[3]}</td>
                           <td className={"status-" + submission[10]}>{submission[10]}</td>
                           <td><Button variant="contained" color="success" onClick={() => approveSubmission(submission[0])}>Approve</Button></td>
