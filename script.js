@@ -2,6 +2,11 @@ const eventsPath = "https://api.opendevteam.com/articles"
 const tlContainer = document.getElementsByClassName("tl-container")[0]
 const isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
 
+if (location.hostname == "localhost") {
+	let title = document.title
+	document.title = "(DEV) " + title
+}
+
 function genEvents(path) {
 	fetch(path,)
 		.then(response => response.json())
