@@ -233,6 +233,8 @@ async def get_articles(current_user = Depends(get_current_active_user_optional_a
     cursor = users_db.cursor()
     cursor.execute("SELECT * FROM articles")
     articles = cursor.fetchall()
+    #sort articles by date (oldest first)
+    articles.sort(key=lambda x: datetime.strptime(x[3], "%Y-%m-%d").date())
     if current_user:
         if current_user.is_admin:
             return articles
