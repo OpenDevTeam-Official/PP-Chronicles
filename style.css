@@ -79,7 +79,7 @@ body {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   color: #FFFFFF;
-  mix-blend-mode: lighten;
+  mix-blend-mode: overlay;
   text-align: center;
   /* Dynamic Font size */
   font-size: 3vw;
@@ -91,7 +91,7 @@ body {
   text-align: center;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   color: #FFFFFF;
-  mix-blend-mode: lighten;
+  mix-blend-mode: overlay;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 2vw;
   margin-top: 0;
@@ -214,11 +214,11 @@ body {
 
 .eventdescription{
   font-size: 4vw;
-}
+  }
 
 .eventTitle{
   font-size: 6vw;
-}
+  }
 
 .submit {
   color: #4040bf;
@@ -227,21 +227,25 @@ body {
   bottom: 1vh;
   left: 50%;
   transform: translateX(-50%);
-}
+  }
 
 .submitTitle {
   margin-top: auto;
   margin-bottom: auto;
   font-size: 3vw;
-}
+  }
 
 .submitTitle:hover {
   cursor: pointer;
-}
+  }
 
 .submitNewButton {
   display: none;
-}
+  }
+
+.dateContainer {
+  transform: translateX(5vw);
+  }
 }
 
 /* desktop */
@@ -269,7 +273,6 @@ body {
 
   .dateContainer.right {
     transform: translateX(-7vw);
-
   }
 
   .submit {

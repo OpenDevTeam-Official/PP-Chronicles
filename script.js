@@ -3,6 +3,14 @@ const eventsPath = "https://api.opendevteam.com/articles"
 const tlContainer = document.getElementsByClassName("tl-container")[0]
 const isMobile = window.matchMedia("only screen and (max-width: 768px)").matches;
 
+// better mobile shits maybe™
+window.addEventListener("orientationchange", function() {
+	// Reload the page if the orientation has changed
+	if (window.orientation !== undefined) {
+	  window.location.reload();
+	}
+  });
+
 // This just makes my life so much easier lol. also hi bababoy
 if (location.hostname == "localhost") {
 	let title = document.title
