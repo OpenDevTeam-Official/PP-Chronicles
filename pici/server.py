@@ -261,6 +261,15 @@ async def delete_article(id: int, current_user: Annotated[User, Depends(get_curr
     users_db.commit()
     return {"success": "Article deleted"}
 
+@app.post("/articles/editimage", summary="Edit Article Image", description="Edits an article's image. This endpoint requires authentication and the user must be an admin.")
+async def edit_article_image(id: int, image: str, current_user: Annotated[User, Depends(get_current_active_user)]):
+    if not current_user.is_admin:
+        return {"error": "You are not an admin"}
+    cursor = users_db.cursor()
+    cursor.execute("UPDATE articles SET thumbnail = ? WHERE id = ?", (image, id))
+    users_db.commit()
+    return {"success": "Article image edited"}
+
 class SubmittedArticle(BaseModel):
     id : int
     title: str
