@@ -42,6 +42,13 @@ function placeEvent(tlContainer, event, index) {
 	mainContainer = document.createElement("div")
 	mainContainer.classList.add("mainContainer")
 
+	dateContainer = document.createElement("div")
+	dateContainer.classList.add("dateContainer")
+	dateStamp = document.createElement("h2")
+	dateStamp.textContent = event[1]
+	dateStamp.classList.add = "dateStamp"
+	dateContainer.appendChild(dateStamp)
+
 	iconContainer = document.createElement("div")
 	iconContainer.classList.add("iconImage")
 	iconImage = document.createElement("img")
@@ -78,17 +85,22 @@ function placeEvent(tlContainer, event, index) {
 	if (isMobile) {
 		mainContainer.appendChild(iconContainer)
 		mainContainer.appendChild(eventContainer)
+		eventContainer.appendChild(dateContainer)
 	} else {
 		if ((index + 1) % 2 == 0) {
 			mainContainer.classList.add("right");
 			eventContainer.classList.add("right");
+			dateContainer.classList.add("right")
+			mainContainer.appendChild(dateContainer)
 			mainContainer.appendChild(iconContainer)
 			mainContainer.appendChild(eventContainer)
 		} else {
 			mainContainer.classList.add("left");
 			eventContainer.classList.add("left");
+			dateContainer.classList.add("left")
 			mainContainer.appendChild(eventContainer)
 			mainContainer.appendChild(iconContainer)
+			mainContainer.appendChild(dateContainer)
 		}
 	}
 	tlContainer.appendChild(mainContainer);
